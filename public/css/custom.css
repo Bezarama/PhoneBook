@@ -1,0 +1,4 @@
+label.asterisk:after {
+    content: " * ";
+    color: #dd0010;
+}
