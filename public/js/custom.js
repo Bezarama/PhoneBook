@@ -1,15 +1,11 @@
 $(function () {
-    $('[data-toggle="tooltip"]').tooltip();
-})
 
-$(function () {
+    window.mask = "+9 (999) 999-99-99";
+    Inputmask({mask: mask}).mask('.inputmask');
 
-    if (jQuery.fn.inputmask) {
-        // let mask = "+7 (999) 999-99-99"; //РФ
-        $('[data-mask]').inputmask({
-            // mask: [mask],
-            keepStatic: true
-        });
-    }
+    // var alertList = document.querySelectorAll('.alert')
+    // alertList.forEach(function (alert) {
+    //     new bootstrap.Alert(alert)
+    // })
 
 });

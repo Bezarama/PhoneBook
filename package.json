@@ -24,7 +24,8 @@
         "sweetalert2": "^11.1.5"
     },
     "dependencies": {
-        "datatables.net-bs5": "^1.12.1",
-        "font-awesome": "^4.7.0"
+        "font-awesome": "^4.7.0",
+        "inputmask": "^5.0.7",
+        "moment": "^2.29.3"
     }
 }

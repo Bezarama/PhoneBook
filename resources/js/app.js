@@ -1,3 +1,6 @@
 require('./bootstrap');
-require('datatables.net-bs5');
+window.moment = require('moment');
+window.Swal = require('sweetalert2');
+window.inputmask = require('inputmask');
+
 

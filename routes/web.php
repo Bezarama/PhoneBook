@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,8 +20,22 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])
+    ->name('home')
+    ->middleware(['auth']);
 
-Route::prefix('contacts')->group(function () {
+Route::group(['middleware' => 'auth'], function () {
+
+    Route::resource('contacts', App\Http\Controllers\ContactsController::class);
+
+    Route::prefix('contacts')->group(function () {
+
+        Route::post('datatables-data/{favouriteCriteria?}', [App\Http\Controllers\ContactsController::class, 'dataTablesData'])
+            ->name('contacts.datatables-data');
+
+        Route::patch('contacts.toggle-favourite/{contact}', [App\Http\Controllers\ContactsController::class, 'toggleFavourite'])
+            ->name('contacts.toggle-favourite');
+
+    });
 
 });

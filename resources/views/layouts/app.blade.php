@@ -9,14 +9,15 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css') }}?{{filemtime(public_path('css/app.css'))}}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/datatables/dataTables.bootstrap5.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}?{{filemtime(public_path('css/custom.css'))}}">
 
 </head>
 <body>
 <div id="app">
     <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-        <div class="container-fluid">
+        <div class="container">
             <i class="fa fa-contact-book me-2"></i><a class="navbar-brand" href="{{ route('home') }}">
                 {{ config('app.name', 'Laravel') }}
             </a>
@@ -31,13 +32,12 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item dropdown">
-                            <a id="navbarDropdownContacts" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            <a id="navbarDropdownContacts" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Контакты
                             </a>
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownContacts">
-                                <a class="dropdown-item" href="">Все контакты</a>
-                                <a class="dropdown-item" href="">Избранное</a>
-                                <a class="dropdown-item" href="">Добавить контакт</a>
+                                <a class="dropdown-item" href="{{ route('contacts.index') }}">Список контактов</a>
+                                <a class="dropdown-item" href="{{ route('contacts.create') }}">Добавить новый контакт</a>
                             </div>
                         </li>
                     </ul>
@@ -60,7 +60,7 @@
                         @endif
                     @else
                         <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {{ Auth::user()->name }}
                             </a>
 
@@ -83,12 +83,15 @@
     </nav>
 
     <main class="py-4">
+        @include('partials.alerts')
         @yield('content')
     </main>
 </div>
 
-<script src="{{ asset('js/app.js') }}"></script>
-<script src="{{ asset('js/custom.js') }}" defer></script>
+<script src="{{ asset('js/app.js') }}?{{filemtime(public_path('js/app.js'))}}"></script>
+<script src="{{ asset('js/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('js/datatables/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('js/custom.js') }}?{{filemtime(public_path('js/custom.js'))}}" defer></script>
 
 @yield('js')
 
