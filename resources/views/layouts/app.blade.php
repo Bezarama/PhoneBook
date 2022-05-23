@@ -40,6 +40,14 @@
                                 <a class="dropdown-item" href="{{ route('contacts.create') }}">Добавить новый контакт</a>
                             </div>
                         </li>
+                        <li class="nav-item dropdown">
+                            <a id="navbarDropdownAPI" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                API
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownAPI">
+                                <a class="dropdown-item" href="{{ route('token.index') }}">Управление токенами</a>
+                            </div>
+                        </li>
                     </ul>
                 @endif
 

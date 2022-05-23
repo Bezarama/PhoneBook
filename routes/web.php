@@ -26,8 +26,10 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])
 
 Route::group(['middleware' => 'auth'], function () {
 
+    //CRUD работа с контактами
     Route::resource('contacts', App\Http\Controllers\ContactsController::class);
 
+    //обработка ajax запросов на получение контактов и переключатель "избранное"
     Route::prefix('contacts')->group(function () {
 
         Route::post('datatables-data/{favouriteCriteria?}', [App\Http\Controllers\ContactsController::class, 'dataTablesData'])
@@ -35,6 +37,15 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::patch('contacts.toggle-favourite/{contact}', [App\Http\Controllers\ContactsController::class, 'toggleFavourite'])
             ->name('contacts.toggle-favourite');
+
+    });
+
+    //работа с токенами (генерирование, отзыв)
+    Route::prefix('token')->group(function () {
+
+        Route::get('/', [App\Http\Controllers\TokenController::class, 'index'])->name('token.index');
+        Route::get('generate', [App\Http\Controllers\TokenController::class, 'generate'])->name('token.generate');
+        Route::get('delete', [App\Http\Controllers\TokenController::class, 'delete'])->name('token.delete');
 
     });
 

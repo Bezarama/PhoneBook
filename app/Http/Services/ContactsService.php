@@ -19,7 +19,7 @@ class ContactsService
      * @param string $favouriteCriteria - фильтр по признаку "избранное"
      * @return Collection
      */
-    public function getContacts(string $favouriteCriteria): Collection
+    public function getContacts(string $favouriteCriteria = 'all'): Collection
     {
 
         $qb = auth()->user()->contacts()->newQuery();
