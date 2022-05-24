@@ -67,7 +67,7 @@ class ContactPolicy
      */
     private function commonCRUDcheck(User $user, Contact $contact): bool
     {
-        return $user->id === $contact->user_id;
+        return $user->id === (int)$contact->user_id;
     }
 
 }
