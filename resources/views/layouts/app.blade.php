@@ -38,6 +38,8 @@
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownContacts">
                                 <a class="dropdown-item" href="{{ route('contacts.index') }}">Список контактов</a>
                                 <a class="dropdown-item" href="{{ route('contacts.create') }}">Добавить новый контакт</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{{ route('generate-random-contacts',10) }}">Сгенерировать 10 случайных контактов</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
@@ -46,6 +48,7 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownAPI">
                                 <a class="dropdown-item" href="{{ route('token.index') }}">Управление токенами</a>
+                                <a class="dropdown-item" href="{{ url('/api/documentation') }}">Документация Swagger</a>
                             </div>
                         </li>
                     </ul>

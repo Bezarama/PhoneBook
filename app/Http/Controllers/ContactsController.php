@@ -3,15 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreContactRequest;
-use App\Http\Services\ContactsService;
+use App\Http\Requests\UpdateContactRequest;
+use App\Http\Services\V1\ContactsService;
 use App\Models\Contact;
 use Yajra\DataTables\DataTables;
-use function PHPUnit\Framework\throwException;
 
 class ContactsController extends Controller
 {
 
-    private $contactsService;
+    /**
+     * @var ContactsService
+     */
+    private ContactsService $contactsService;
 
     public function __construct(ContactsService $contactsService)
     {
@@ -33,30 +36,19 @@ class ContactsController extends Controller
      */
     public function dataTablesData(string $favouriteCriteria = 'all')
     {
-        $items = $this->contactsService->getContacts($favouriteCriteria);
-        return Datatables::of($items)->make(true);
+        $contacts = $this->contactsService->getContacts($favouriteCriteria);
+
+        return Datatables::of($contacts)->make(true);
     }
 
     /**
      * Обработка ajax запроса на переключение статуса "в избранном"
      * @param int $id
-     * @return string[]
+     * @return array
      */
-    public function toggleFavourite(Contact $contact): array
+    public function toggleFavourite(int $id): array
     {
-
-        try {
-
-            $this->authorize('edit', $contact);
-
-        } catch (\Exception $e) {
-
-            return [
-                'status' => 'error',
-                'message' => 'Запись не найдена или доступ к ней отсутствует',
-            ];
-
-        }
+        $contact = $this->contactsService->getContact($id);
 
         $this->contactsService->toggleFavourite($contact);
 
@@ -79,7 +71,6 @@ class ContactsController extends Controller
      */
     public function store(StoreContactRequest $request)
     {
-
         $validatedData = $request->validated();
 
         $this->contactsService->storeContact($validatedData);
@@ -96,28 +87,30 @@ class ContactsController extends Controller
     /**
      * Страница добавления-редактирования контакта
      *
-     * @param Contact $contact
+     * @param int $id
      * @return \Illuminate\Contracts\View\View
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function edit(Contact $contact)
+    public function edit(int $id)
     {
-        $this->authorize('update', $contact);
+        $contact = $this->contactsService->getContact($id);
+
+        $this->authorize('edit', $contact);
+
         return view('contacts.create-edit', ['model' => $contact]);
+
     }
 
     /**
-     * Запрос на сохранение существующего контакта
+     * Запрос на обновление существующего контакта
      *
-     * @param StoreContactRequest $request
-     * @param Contact $contact
+     * @param UpdateContactRequest $request
+     * @param int $id
      * @return \Illuminate\Http\RedirectResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(StoreContactRequest $request, Contact $contact)
+    public function update(UpdateContactRequest $request, int $id)
     {
-
-        $this->authorize('update', $contact);
+        $contact = $this->contactsService->getContact($id);
 
         $validatedData = $request->validated();
 
@@ -134,22 +127,33 @@ class ContactsController extends Controller
     /**
      * Страница просмотра контакта
      *
-     * @param Contact $contact
+     * @param int $id
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function show(Contact $contact)
+    public function show(int $id)
     {
+        $contact = $this->contactsService->getContact($id);
+
         $this->authorize('view', $contact);
+
         return view('contacts.show', ['model' => $contact]);
+
     }
 
-    public function destroy(Contact $contact)
+    /**
+     * Запрос на удаление существующего контакта
+     *
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse|string[]
+     */
+    public function destroy(int $id)
     {
+        $contact = $this->contactsService->getContact($id);
 
         try {
 
-            $this->authorize('delete', $contact);
+            $this->contactsService->deleteContact($contact);
 
         } catch (\Exception $e) {
 
@@ -164,8 +168,6 @@ class ContactsController extends Controller
 
         }
 
-        $this->contactsService->deleteContact($contact);
-
         if (request()->ajax()) {
             return [
                 'status' => 'success',
@@ -173,8 +175,7 @@ class ContactsController extends Controller
             ];
         }
 
-        return redirect()->route('contacts.index')->with(['success' => 'Запись удалена']);
-
+        return back()->with(['success' => 'Запись удалена']);
 
     }
 

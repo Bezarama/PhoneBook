@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Services\V1\ContactsService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -29,13 +30,19 @@ Route::group(['middleware' => 'auth'], function () {
     //CRUD работа с контактами
     Route::resource('contacts', App\Http\Controllers\ContactsController::class);
 
+    //генерирование случайных контактов (когда лень руками забивать тестовые данные)
+    Route::get('generate-random-contacts/{num?}', function ($num) {
+        (new ContactsService())->generateRandomContacts($num);
+        return back()->with(['success' => 'Случайные контакты сгенерированы']);
+    })->name('generate-random-contacts');
+
     //обработка ajax запросов на получение контактов и переключатель "избранное"
     Route::prefix('contacts')->group(function () {
 
         Route::post('datatables-data/{favouriteCriteria?}', [App\Http\Controllers\ContactsController::class, 'dataTablesData'])
             ->name('contacts.datatables-data');
 
-        Route::patch('contacts.toggle-favourite/{contact}', [App\Http\Controllers\ContactsController::class, 'toggleFavourite'])
+        Route::patch('toggle-favourite/{contact}', [App\Http\Controllers\ContactsController::class, 'toggleFavourite'])
             ->name('contacts.toggle-favourite');
 
     });

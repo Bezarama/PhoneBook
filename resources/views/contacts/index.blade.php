@@ -74,7 +74,7 @@
                     },
                     {
                         data: 'is_favourite',
-                        title: "Избранное",
+                        title: "<span class='text-success' title='Клик по звездочке переключает статус '>Избранное *</span>",
                         searchable: false,
                         render: function (data, type, row) {
                             return '<a class="fav-change-status" data-id="' + row.id + '" href="javascript:void(0);"  title="' + (data ? 'Удалить из избранного' : 'Добавить в избранное') + '"><i class="fa fa-star text-' + (data ? 'warning' : 'secondary-light') + '"></i></a>';
@@ -140,7 +140,7 @@
                         'X-CSRF-TOKEN': "{{ csrf_token() }}"
                     },
                     type: 'PATCH',
-                    success: function (resp) {
+                    success: function (resp, textStatus, errorThrown) {
                         if (resp.status && resp.status == 'success') {
                             Swal.fire({
                                 title: resp.message,
@@ -148,7 +148,7 @@
                                 timer: 1500,
                             });
                         } else {
-                            let message = resp.message ? resp.message : resp;
+                            let message = resp.responseJSON.message ? resp.responseJSON.message : errorThrown;
                             Swal.fire({
                                 title: 'Ошибка',
                                 text: message,
@@ -159,9 +159,13 @@
                     complete: function () {
                         table.ajax.reload(null, false);
                     },
-                    error: function (response) { //ошибка ajax
-                        console.log(response)
-                        return alert('Ошибка обработки запроса')
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        let message = jqXHR.responseJSON.message ? jqXHR.responseJSON.message : errorThrown;
+                        Swal.fire({
+                            title: 'Ошибка',
+                            text: message,
+                            icon: "error",
+                        });
                     }
                 });
 
@@ -181,6 +185,8 @@
                     // there are less elements, so we navigate to the previous page
                     tableToRedraw.page('previous').draw('page')
                 }
+            } else {
+                tableToRedraw.draw(false)
             }
         }
 
@@ -228,12 +234,15 @@
                             }
                         },
                         complete: function () {
-                            // table.ajax.reload(null, false);
                             redrawAfterDelete(table);
                         },
-                        error: function (response) { //ошибка ajax
-                            console.log(response)
-                            return alert('Ошибка обработки запроса')
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            let message = jqXHR.responseJSON.message ? jqXHR.responseJSON.message : errorThrown;
+                            Swal.fire({
+                                title: 'Ошибка',
+                                text: message,
+                                icon: "error",
+                            });
                         }
                     });
 

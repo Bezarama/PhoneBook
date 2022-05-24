@@ -13,8 +13,8 @@ class ContactPolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param \App\Models\User $user
-     * @param \App\Models\Contact $contact
+     * @param User $user
+     * @param Contact $contact
      * @return bool
      */
     public function view(User $user, Contact $contact): bool
@@ -25,8 +25,8 @@ class ContactPolicy
     /**
      * Determine whether the user can edit the model.
      *
-     * @param \App\Models\User $user
-     * @param \App\Models\Contact $contact
+     * @param User $user
+     * @param Contact $contact
      * @return bool
      */
     public function edit(User $user, Contact $contact): bool
@@ -37,8 +37,8 @@ class ContactPolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param \App\Models\User $user
-     * @param \App\Models\Contact $contact
+     * @param User $user
+     * @param Contact $contact
      * @return bool
      */
     public function update(User $user, Contact $contact): bool
@@ -49,8 +49,8 @@ class ContactPolicy
     /**
      * Determine whether the user can delete the model.
      *
-     * @param \App\Models\User $user
-     * @param \App\Models\Contact $contact
+     * @param User $user
+     * @param Contact $contact
      * @return bool
      */
     public function delete(User $user, Contact $contact): bool
@@ -69,4 +69,5 @@ class ContactPolicy
     {
         return $user->id === $contact->user_id;
     }
+
 }
