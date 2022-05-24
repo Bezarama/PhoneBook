@@ -10,7 +10,7 @@
     },
     "servers": [
         {
-            "url": "https://phonebook.loc/api/v1",
+            "url": "/api/v1",
             "description": "PhoneBook API Server"
         }
     ],
