@@ -48,7 +48,7 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownAPI">
                                 <a class="dropdown-item" href="{{ route('token.index') }}">Управление токенами</a>
-                                <a class="dropdown-item" href="{{ url('/api/documentation') }}">Документация Swagger</a>
+                                <a class="dropdown-item" target="_blank" href="{{ url('/api/documentation') }}">Документация Swagger</a>
                             </div>
                         </li>
                     </ul>
